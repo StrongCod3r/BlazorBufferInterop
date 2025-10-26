@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BlazorBufferInterop/BlazorBufferInterop.Client/BlazorBufferInterop.Client.csproj" />
+  <Project Path="BlazorBufferInterop/BlazorBufferInterop/BlazorBufferInterop.csproj" />
+</Solution>

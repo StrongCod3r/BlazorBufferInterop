@@ -1,0 +1,71 @@
+﻿@page "/interop"
+@rendermode InteractiveWebAssembly
+@inject IJSRuntime JS
+
+<h3>Interop con Canvas</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <button class="btn btn-primary mb-3" @onclick="Run">Probar Buffer Simple</button>
+        <button class="btn btn-success mb-3 ms-2" @onclick="DrawCanvas">Dibujar Gradiente en Canvas</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <canvas id="myCanvas" width="400" height="300" style="border: 2px solid #333; background-color: #f0f0f0;"></canvas>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(resultMessage))
+{
+    <div class="alert alert-success mt-3">@resultMessage</div>
+}
+
+@code {
+    private string? errorMessage;
+    private string? resultMessage;
+
+    private async Task Run()
+    {
+        errorMessage = null;
+        resultMessage = null;
+
+        try
+        {
+            await BufferInterop.RunAsync();
+            resultMessage = "Buffer llenado correctamente. Verifica la consola del navegador.";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Interop error: {ex.Message}";
+            Console.WriteLine($"Interop error: {ex}");
+            StateHasChanged();
+        }
+    }
+
+    private async Task DrawCanvas()
+    {
+        errorMessage = null;
+        resultMessage = null;
+
+        try
+        {
+            await BufferInterop.DrawGradientAsync(JS, "myCanvas", 400, 300);
+            resultMessage = "Gradiente dibujado exitosamente en el canvas!";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al dibujar: {ex.Message}";
+            Console.WriteLine($"Canvas error: {ex}");
+            StateHasChanged();
+        }
+    }
+}
